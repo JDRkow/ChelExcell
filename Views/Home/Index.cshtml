@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model IEnumerable<ChelExcell.Models.Area>
+<div class="jumbotron">
+    <p>Тестовое задание для Челябинского регионального центра навигационно-информационных технологий</p>
+</div>
+<div>
+    <script>
+        function chart1() {
+            var ctx = document.getElementById('myChart');
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [@foreach (var m in Model) {@Html.Raw("'" + String.Join("', '", m.NameArea) + "', ")}],
+                    datasets: [{
+                        label: 'Показатели',
+                        data: [@foreach (var m in Model) {@Html.Raw("'" + String.Join("', '", m.AreaParameter) + "', ")}],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        };</script>
+    <canvas id="myChart"></canvas>
+    @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="upload" /><br>
+        <input type="submit" value="Загрузить" />
+    }
+    <input type="submit" value="Обновить" onclick="chart1()" />
+</div>
